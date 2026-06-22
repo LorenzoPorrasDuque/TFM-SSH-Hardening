@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: n8n
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_HOST=${N8N_HOST:-localhost}
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=${N8N_PROTOCOL:-http}
+      - NODE_ENV=production
+      - WEBHOOK_URL=${WEBHOOK_URL:-http://localhost:5678/}
+    volumes:
+      - n8n_storage:/home/node/.n8n
+    networks:
+      - n8n_network
+    restart: unless-stopped
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: api
+    ports:
+      - "8080:8080"
+    networks:
+      - n8n_network
+    environment:
+      - N8N_HOST=n8n
+      - N8N_PORT=5678
+    restart: unless-stopped
+    depends_on:
+      - n8n
+
+volumes:
+  n8n_storage:
+
+networks:
+  n8n_network:
+    driver: bridge

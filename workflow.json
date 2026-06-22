@@ -1,0 +1,131 @@
+{
+  "name": "My workflow 2",
+  "nodes": [
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api:8080/ssh-config",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "IP",
+              "value": "={{ $('On form submission').item.json.IP }}"
+            },
+            {
+              "name": "User",
+              "value": "={{ $('On form submission').item.json.User }}"
+            },
+            {
+              "name": "Password",
+              "value": "={{ $('On form submission').item.json.Password }}"
+            },
+            {
+              "name": "PrivateKey",
+              "value": "={{ $('On form submission').item.json.PrivateKey }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        368,
+        -48
+      ],
+      "id": "56a13443-5b1c-4560-8093-b79c7e82df41",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "formTitle": "Data",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "IP",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "User",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Password",
+              "fieldType": "password"
+            },
+            {
+              "fieldLabel": "PrivateKey",
+              "fieldType": "password"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.6,
+      "position": [
+        80,
+        -48
+      ],
+      "id": "73d484ce-c0ca-465d-a497-0d1bedee4f78",
+      "name": "On form submission",
+      "webhookId": "00685ce3-d8c9-4b93-8d89-87343225e395",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://api:8080/ssh-config/get",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        624,
+        -48
+      ],
+      "id": "5ea47c5c-16d6-47b1-9f39-e90902b2d401",
+      "name": "HTTP Request1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "07c4c232-c0ef-4fe9-b735-8781d871d2a5",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "63cc38369022b76f2f9d1398e196a183fcc64873d7745cd5c8d8a89c4a6e0b3c"
+  },
+  "nodeGroups": [],
+  "id": "pBQwQFUniQylJPMz",
+  "tags": []
+}
