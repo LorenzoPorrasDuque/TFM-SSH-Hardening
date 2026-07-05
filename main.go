@@ -73,3 +73,17 @@ func main() {
 	r.Run(":8080")
 
 }
+
+/*
+
+if strings.EqualFold(cfg.PasswordAuthentication, "yes") {
+		audit.Score -= 15
+		audit.Findings = append(audit.Findings, Finding{
+			Setting: "PasswordAuthentication",
+			Value: cfg.PasswordAuthentication,
+			Status: "WARN",
+			Severity: "HIGH",
+			Recommendation: "Deshabilitar la autenticación por contraseña y usar llaves SSH.",
+		})
+	}
+*/

@@ -87,6 +87,43 @@
       ],
       "id": "5ea47c5c-16d6-47b1-9f39-e90902b2d401",
       "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        832,
+        -48
+      ],
+      "id": "55483fa3-e144-4ca4-af9d-f45cea77bc0c",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "typeVersion": 1,
+      "position": [
+        704,
+        160
+      ],
+      "id": "562dc187-d5ef-480f-a77b-ccfb791e6f07",
+      "name": "Ollama Chat Model"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        848,
+        160
+      ],
+      "id": "1eb46abb-a470-47a1-8b26-55ec386e118c",
+      "name": "Simple Memory"
     }
   ],
   "pinData": {},
@@ -112,6 +149,39 @@
           }
         ]
       ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ollama Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": false,
@@ -120,7 +190,7 @@
     "binaryMode": "separate",
     "availableInMCP": false
   },
-  "versionId": "07c4c232-c0ef-4fe9-b735-8781d871d2a5",
+  "versionId": "22eb5f12-0960-4603-bfab-7a15fe9ad9a1",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "63cc38369022b76f2f9d1398e196a183fcc64873d7745cd5c8d8a89c4a6e0b3c"
