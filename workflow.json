@@ -31,10 +31,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        368,
-        -48
+        -288,
+        -384
       ],
-      "id": "56a13443-5b1c-4560-8093-b79c7e82df41",
+      "id": "503d0865-bb08-4d6b-a14e-a10a33833bc1",
       "name": "HTTP Request"
     },
     {
@@ -65,12 +65,12 @@
       "type": "n8n-nodes-base.formTrigger",
       "typeVersion": 2.6,
       "position": [
-        80,
-        -48
+        -576,
+        -384
       ],
-      "id": "73d484ce-c0ca-465d-a497-0d1bedee4f78",
+      "id": "06036f79-2870-4b02-808a-155cb924e0b3",
       "name": "On form submission",
-      "webhookId": "00685ce3-d8c9-4b93-8d89-87343225e395",
+      "webhookId": "4e1191d2-e4db-43ea-bdda-04f4077dc0cf",
       "alwaysOutputData": false
     },
     {
@@ -82,48 +82,72 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.4,
       "position": [
-        624,
-        -48
+        -32,
+        -384
       ],
-      "id": "5ea47c5c-16d6-47b1-9f39-e90902b2d401",
+      "id": "fd98e0ef-4c3b-4438-b6df-2918cf399d38",
       "name": "HTTP Request1"
     },
     {
       "parameters": {
+        "promptType": "define",
+        "text": "=You are a cybersecurity assistant specialized in SSH configuration review.\n\nYour task is to analyze the SSH configuration data provided by a security scan and give a clear security assessment.\n\nImportant:\n- This is a security review simulation, not a production security certification.\n- Do not claim that a system is fully secure.\n- Base your analysis only on the data provided.\n- If a value is missing, say that it was not provided and avoid making assumptions.\n\nFor each configuration item:\n1. Explain what the setting means.\n2. Determine if the current value is secure, risky, or requires review.\n3. Explain the potential security impact.\n4. Provide a recommended value or action when appropriate.\n\nPay special attention to:\n- PermitRootLogin\n- PasswordAuthentication\n- PubkeyAuthentication\n- PermitEmptyPasswords\n- KbdInteractiveAuthentication\n- ChallengeResponseAuthentication\n- UsePAM\n- X11Forwarding\n- AllowTcpForwarding\n- AllowAgentForwarding\n- PermitTunnel\n- MaxAuthTries\n- LoginGraceTime\n- Ciphers\n- MACs\n- KexAlgorithms\n\nSecurity guidelines:\n- Root login over SSH should generally be disabled or restricted.\n- Password authentication should generally be disabled when key-based authentication is available.\n- Empty passwords should never be allowed.\n- Weak cryptographic algorithms should be flagged.\n- Forwarding features should be reviewed depending on the environment.\n- Missing security controls should be mentioned.\n\nOutput format:\n\n## SSH Security Assessment\n\nOverall Risk Level:\n- LOW / MEDIUM / HIGH\n- Brief explanation\n\n## Findings\n\nFor each finding:\n\nSetting:\nCurrent Value:\nRisk:\nExplanation:\nRecommendation:\n\n## Summary\n\nProvide:\n- Main security concerns\n- Recommended improvements\n- Any missing information needed for a more accurate assessment\n\nInput data:\n{{ $json.config }}",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        832,
-        -48
+        256,
+        -384
       ],
-      "id": "55483fa3-e144-4ca4-af9d-f45cea77bc0c",
+      "id": "9b96ec49-463a-48b0-9d96-87de15feda86",
       "name": "AI Agent"
     },
     {
       "parameters": {
+        "model": "=deepseek-r1:1.5b",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
       "typeVersion": 1,
       "position": [
-        704,
-        160
+        160,
+        -144
       ],
-      "id": "562dc187-d5ef-480f-a77b-ccfb791e6f07",
-      "name": "Ollama Chat Model"
+      "id": "d31a0257-85ab-48e5-adf7-7e55521634f5",
+      "name": "Ollama Chat Model",
+      "credentials": {
+        "ollamaApi": {
+          "id": "3Kszrnrj4cDfq16T",
+          "name": "Ollama account"
+        }
+      }
     },
     {
-      "parameters": {},
-      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
-      "typeVersion": 1.4,
+      "parameters": {
+        "html": "<!DOCTYPE html>\n<html lang=\"en\">\n  \n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>Beautiful HTML Document</title>\n\n  <style>\n    * {\n      box-sizing: border-box;\n      margin: 0;\n      padding: 0;\n      font-family: \"Inter\", \"Segoe UI\", Arial, sans-serif;\n    }\n\n    body {\n      min-height: 100vh;\n      display: flex;\n      justify-content: center;\n      align-items: center;\n      background: linear-gradient(\n        135deg,\n        #667eea,\n        #764ba2\n      );\n      padding: 30px;\n    }\n\n    .container {\n      width: 100%;\n      max-width: 800px;\n      background: rgba(255, 255, 255, 0.95);\n      border-radius: 20px;\n      padding: 40px;\n      box-shadow: \n        0 20px 40px rgba(0,0,0,0.15);\n      animation: fadeIn 0.6s ease-in-out;\n    }\n\n    .header {\n      text-align: center;\n      margin-bottom: 30px;\n    }\n\n    h1 {\n      font-size: 36px;\n      font-weight: 800;\n      background: linear-gradient(\n        90deg,\n        #ff6d5a,\n        #ff9f43\n      );\n      -webkit-background-clip: text;\n      -webkit-text-fill-color: transparent;\n      margin-bottom: 10px;\n    }\n\n    h2 {\n      color: #6b7280;\n      font-size: 18px;\n      font-weight: 500;\n    }\n\n    .content-box {\n      background: #f8fafc;\n      border-left: 5px solid #667eea;\n      padding: 25px;\n      border-radius: 12px;\n      color: #374151;\n      font-size: 17px;\n      line-height: 1.7;\n      white-space: pre-wrap;\n      box-shadow: inset 0 0 10px rgba(0,0,0,0.03);\n    }\n\n    .footer {\n      text-align: center;\n      margin-top: 25px;\n      color: #9ca3af;\n      font-size: 14px;\n    }\n\n    @keyframes fadeIn {\n      from {\n        opacity: 0;\n        transform: translateY(20px);\n      }\n      to {\n        opacity: 1;\n        transform: translateY(0);\n      }\n    }\n\n  </style>\n</head>\n\n<body>\n\n  <div class=\"container\">\n\n    <div class=\"header\">\n      <h1>✨ report</h1>\n    \n    </div>\n\n    <div class=\"content-box\">\n      {{ $json.output }}\n    </div>\n\n\n\n  </div>\n\n</body>\n  \n</html>\n"
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
       "position": [
-        848,
-        160
+        608,
+        -384
       ],
-      "id": "1eb46abb-a470-47a1-8b26-55ec386e118c",
-      "name": "Simple Memory"
+      "id": "5d37d368-bad8-4a8c-b1eb-56a2c30e30b0",
+      "name": "HTML"
+    },
+    {
+      "parameters": {
+        "jsCode": "const html = $json.output; \n\nreturn [\n  {\n    binary: {\n      data: {\n        data: Buffer.from(html, \"utf-8\").toString(\"base64\"),\n        mimeType: \"text/html\",\n        fileName: \"ssh-security-report.html\"\n      }\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        656,
+        -128
+      ],
+      "id": "ec387649-063b-4550-a923-87c39fb74fd8",
+      "name": "Code in JavaScript"
     }
   ],
   "pinData": {},
@@ -172,12 +196,23 @@
         ]
       ]
     },
-    "Simple Memory": {
-      "ai_memory": [
+    "AI Agent": {
+      "main": [
         [
           {
-            "node": "AI Agent",
-            "type": "ai_memory",
+            "node": "HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
             "index": 0
           }
         ]
@@ -190,12 +225,12 @@
     "binaryMode": "separate",
     "availableInMCP": false
   },
-  "versionId": "22eb5f12-0960-4603-bfab-7a15fe9ad9a1",
+  "versionId": "811fc61e-61c3-4ebe-be5a-818783c49773",
   "meta": {
     "templateCredsSetupCompleted": true,
-    "instanceId": "63cc38369022b76f2f9d1398e196a183fcc64873d7745cd5c8d8a89c4a6e0b3c"
+    "instanceId": "e1e4b3455dbb9ce64781ea88c3136e5f77b50c641a73beeb5ca9cd23a3b548e9"
   },
   "nodeGroups": [],
-  "id": "pBQwQFUniQylJPMz",
+  "id": "0E1p4YXuhKYALcrT",
   "tags": []
 }
