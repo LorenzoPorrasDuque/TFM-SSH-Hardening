@@ -2,35 +2,30 @@ package connection
 
 import (
 	"encoding/json"
+	"os"
 	"strings"
 
 	"golang.org/x/crypto/ssh"
 )
 
-type SSHDConfigSecurity struct {
-	PermitRootLogin         string `json:"permit_root_login,omitempty"`
-	PasswordAuthentication  string `json:"password_authentication,omitempty"`
-	PubkeyAuthentication    string `json:"pubkey_authentication,omitempty"`
-	PermitEmptyPasswords    string `json:"permit_empty_passwords,omitempty"`
-	ChallengeResponseAuth   string `json:"challenge_response_authentication,omitempty"`
-	KbdInteractiveAuth      string `json:"kbd_interactive_authentication,omitempty"`
-	UsePAM                  string `json:"use_pam,omitempty"`
-	X11Forwarding           string `json:"x11_forwarding,omitempty"`
-	AllowTcpForwarding      string `json:"allow_tcp_forwarding,omitempty"`
-	PermitTunnel            string `json:"permit_tunnel,omitempty"`
-	AllowAgentForwarding    string `json:"allow_agent_forwarding,omitempty"`
-	MaxAuthTries            string `json:"max_auth_tries,omitempty"`
-	MaxSessions             string `json:"max_sessions,omitempty"`
-	ClientAliveInterval     string `json:"client_alive_interval,omitempty"`
-	ClientAliveCountMax     string `json:"client_alive_count_max,omitempty"`
-	LoginGraceTime          string `json:"login_grace_time,omitempty"`
-	IgnoreRhosts            string `json:"ignore_rhosts,omitempty"`
-	HostbasedAuthentication string `json:"hostbased_authentication,omitempty"`
-	StrictModes             string `json:"strict_modes,omitempty"`
-	Protocol                string `json:"protocol,omitempty"`
-	Ciphers                 string `json:"ciphers,omitempty"`
-	MACs                    string `json:"macs,omitempty"`
-	KexAlgorithms           string `json:"kex_algorithms,omitempty"`
+type SSHConfigField struct {
+	Name      string `json:"name"`
+	Directive string `json:"directive"`
+}
+
+func LoadSSHConfigFields(path string) ([]SSHConfigField, error) {
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return nil, err
+	}
+
+	var fields []SSHConfigField
+
+	if err := json.Unmarshal(data, &fields); err != nil {
+		return nil, err
+	}
+
+	return fields, nil
 }
 
 type SSHRequest struct {
@@ -74,7 +69,12 @@ func GetSSHDConfig(client *ssh.Client) (string, error) {
 		return "", err
 	}
 
-	cfg := parseSSHDConfig(string(output))
+	fields, err := LoadSSHConfigFields("config_keys.json")
+	if err != nil {
+		return "", err
+	}
+
+	cfg := parseSSHDConfig(string(output), fields)
 
 	data, err := json.MarshalIndent(cfg, "", "  ")
 	if err != nil {
@@ -84,11 +84,10 @@ func GetSSHDConfig(client *ssh.Client) (string, error) {
 	return string(data), nil
 }
 
-func parseSSHDConfig(content string) SSHDConfigSecurity {
-	cfg := SSHDConfigSecurity{}
-
+func parseSSHDConfig(content string, fields []SSHConfigField) map[string]string {
 	lines := strings.Split(content, "\n")
 
+	// Guarda todas las directivas encontradas
 	values := make(map[string]string)
 
 	for _, line := range lines {
@@ -98,40 +97,23 @@ func parseSSHDConfig(content string) SSHDConfigSecurity {
 			continue
 		}
 
-		fields := strings.Fields(line)
-		if len(fields) < 2 {
+		parts := strings.Fields(line)
+		if len(parts) < 2 {
 			continue
 		}
 
-		key := strings.ToLower(fields[0])
-		value := strings.Join(fields[1:], " ")
+		key := strings.ToLower(parts[0])
+		value := strings.Join(parts[1:], " ")
 
 		values[key] = value
 	}
 
-	cfg.PermitRootLogin = values["permitrootlogin"]
-	cfg.PasswordAuthentication = values["passwordauthentication"]
-	cfg.PubkeyAuthentication = values["pubkeyauthentication"]
-	cfg.PermitEmptyPasswords = values["permitemptypasswords"]
-	cfg.ChallengeResponseAuth = values["challengeresponseauthentication"]
-	cfg.KbdInteractiveAuth = values["kbdinteractiveauthentication"]
-	cfg.UsePAM = values["usepam"]
-	cfg.X11Forwarding = values["x11forwarding"]
-	cfg.AllowTcpForwarding = values["allowtcpforwarding"]
-	cfg.PermitTunnel = values["permittunnel"]
-	cfg.AllowAgentForwarding = values["allowagentforwarding"]
-	cfg.MaxAuthTries = values["maxauthtries"]
-	cfg.MaxSessions = values["maxsessions"]
-	cfg.ClientAliveInterval = values["clientaliveinterval"]
-	cfg.ClientAliveCountMax = values["clientalivecountmax"]
-	cfg.LoginGraceTime = values["logingracetime"]
-	cfg.IgnoreRhosts = values["ignorerhosts"]
-	cfg.HostbasedAuthentication = values["hostbasedauthentication"]
-	cfg.StrictModes = values["strictmodes"]
-	cfg.Protocol = values["protocol"]
-	cfg.Ciphers = values["ciphers"]
-	cfg.MACs = values["macs"]
-	cfg.KexAlgorithms = values["kexalgorithms"]
+	// Construye el resultado usando el JSON
+	result := make(map[string]string)
 
-	return cfg
+	for _, field := range fields {
+		result[field.Name] = values[strings.ToLower(field.Directive)]
+	}
+
+	return result
 }

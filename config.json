@@ -1,0 +1,14 @@
+[
+  {
+    "name": "permit_root_login",
+    "directive": "PermitRootLogin"
+  },
+  {
+    "name": "password_authentication",
+    "directive": "PasswordAuthentication"
+  },
+  {
+    "name": "use_pam",
+    "directive": "UsePAM"
+  }
+]
